@@ -2,6 +2,7 @@ body {
     margin: 0;
     background-color: rgb(193, 188, 183);
     width: 100%;
+    background: linear-gradient( orange, black);
     color: black;
 }
 
@@ -29,10 +30,12 @@ nav a {
     display: inline-block;
     padding: 10px;
     text-align: center;
+    color: goldenrod;
 }
 
 .mainContainer {
     text-align: center;
+    color: lightgoldenrodyellow
 }
 
 .searchContainer {
