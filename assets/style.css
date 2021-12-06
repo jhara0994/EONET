@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    background-color: rgb(193, 188, 183);
+    width: 100%;
+    color: black;
+}
+
+header {
+    padding-bottom: 20px;
+    padding-top: 5px;
+}
+
+h1 {
+    text-align: center;
+}
+
+nav {
+    border: 2px solid black;
+    border-width: 2px 0;
+    list-style: none;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    width: 50%;
+    text-align: center;
+}
+
+nav a {
+    display: inline-block;
+    padding: 10px;
+    text-align: center;
+}
+
+.mainContainer {
+    text-align: center;
+}
+
+.searchContainer {
+    display: block;
+}
+
+#searchBox {
+    display: inline-block;
+    padding: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.compareContainer {
+    padding-bottom: 10px;
+}
+
