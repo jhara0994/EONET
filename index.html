@@ -26,25 +26,29 @@
     <main class="mainContainer">
       <h3>This website is designed to determine natural event risk factors and help you determine if a location is safe enough for you! </h3>
       <p>Enter the desired disaster below to see the most recent occurrences.</p>
+    
+     <div class="searchContainer dropdown column is-centered" id="form">
+      <div id="searchBox" class="search dropdown-trigger">
+        <button name="locSearch" class="button" id="locSearch" aria-haspopup="true" aria-controls="dropdown-menu" data="category" type="text" autofocus="true">Select Category:</button>
+      </div>
+          <div class="dropwdown-menu" id="dropdown-menu3" role="menu">
+            <div class="dropwdown-content">
+              <a class="dropdown-item" id="Drought">Drought</a>
+              <a class="dropdown-item" id="Dust-and-Haze">Dust/Haze</a>
+              <a class="dropdown-item" id="Earthquakes">Earthquakes</a>
+              <a class="dropdown-item" id="Floods">Floods</a>
+              <a class="dropdown-item" id="Landslides">Landslides</a>
+              <a class="dropdown-item" id="Manmade">Man-Made</a>
+              <a class="dropdown-item" id="Sea-and-Lake-Ice">Sea and Lake Ice</a>
+              <a class="dropdown-item" id='Severe Storms'>Severe Storms</a>
+              <a class="dropdown-item is-active" id="Snow">Snow</a>
+              <a class="dropdown-item" id="Temperature-Extremes">Temperature Extremes</a>
+              <a class="dropdown-item" id='Volcanos'>Volcanos</a>
+              <a class="dropdown-item" id="Water-Color">Water-Color</a>
+              <a class="dropdown-item" id="Wildfires">Wildfires</a>
+            </div>
+          </div> 
 
-    <div class="searchContainer dropdown is-active column is-centered" id="form">
-      <form id="searchBox" class="search dropwdown-trigger">
-        <label class="form-label" data ="category" for="location"></label>
-        <input name="locSearch" id="locSearch" data="category" type="text" autofocus="true" class="input column is-one-quarter" placeholder="Enter category:"/>
-          <a class="Drought">Drought</a>
-          <a class="Dust-and-Haze">Dust/Haze</a>
-          <a class="Earthquakes">Earthquakes</a>
-          <a class="Floods">Floods</a>
-          <a class="Landslides">Landslides</a>
-          <a class="Manmade">Man-Made</a>
-          <a class="Sea-and-Lake-Ice">Sea and Lake Ice</a>
-          <a class='Severe Storms'>Severe Storms</a>
-          <a class="Snow">Snow</a>
-          <a class="Temperature-Extremes">Temperature Extremes</a>
-          <a class='Volcanos'>Volcanos</a>
-          <a class="Water-Color">Water-Color</a>
-          <a class="Wildfires">Wildfires</a>
-      </form>
       <button class="btn button is-danger" id="searchBtn">Search</button>
     </div>
 
