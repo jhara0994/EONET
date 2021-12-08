@@ -29,8 +29,8 @@ var today = moment().format('LL')
 // Limit the number of natural event occurrences to what occurred in the past year. - this can be done though search attributes
 // We will need to code the category and the number of occurrences to store in localStorage upon searching.
 function count() {
-  var number = 
-
+  var number = categories.length;
+// array.length - we grab array from EONET and need to return the length to show the number of instances. 
     results.textContent = category.value + number;
     localStorage.setItem = category.value;
     localStorage.setItem = number;
