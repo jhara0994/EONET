@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--may not need this line  <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
-    <title>Location Risk Factors</title>
+    <title>Disaster Risk Factors</title>
     <!--Line below is for the CSS Framework of our choice-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="./assets/style.css">
@@ -14,7 +14,11 @@
 
   <body>
     <header>
+
       <h1 class="title">Location Risk Factors</h1>
+
+      <h1 class="title">Disaster Risk Factors</h1> 
+
       <nav class="navbar">
         <a href="./index.html" class="navbar-item">Home</a>
         <a href="./results.html" class="navbar-item">Compare Results</a>
@@ -26,12 +30,25 @@
 
     <main class="mainContainer">
       <h3>This website is designed to determine natural event risk factors and help you determine if a location is safe enough for you! </h3>
-      <p>Enter the desired location (city and state or zipcode) below to see the most recent natural event occurrences.</p>
+      <p>Enter the desired disaster below to see the most recent occurrences.</p>
 
-    <div class="searchContainer column is-centered" id="form">
-      <form id="searchBox" class="search">
-        <label class="form-label" for="location"></label>
-        <input name="locSearch" id="locSearch" type="text" autofocus="true" class="input column is-one-quarter" placeholder="Enter city and state or zip code:"/>
+    <div class="searchContainer dropdown is-active column is-centered" id="form">
+      <form id="searchBox" class="search dropwdown-trigger">
+        <label class="form-label" data ="category" for="location"></label>
+        <input name="locSearch" id="locSearch" data="category" type="text" autofocus="true" class="input column is-one-quarter" placeholder="Enter category:"/>
+          <a class="Drought">Drought</a>
+          <a class="Dust-and-Haze">Dust/Haze</a>
+          <a class="Earthquakes">Earthquakes</a>
+          <a class="Floods">Floods</a>
+          <a class="Landslides">Landslides</a>
+          <a class="Manmade">Man-Made</a>
+          <a class="Sea-and-Lake-Ice">Sea and Lake Ice</a>
+          <a class='Severe Storms'>Severe Storms</a>
+          <a class="Snow">Snow</a>
+          <a class="Temperature-Extremes">Temperature Extremes</a>
+          <a class='Volcanos'>Volcanos</a>
+          <a class="Water-Color">Water-Color</a>
+          <a class="Wildfires">Wildfires</a>
       </form>
       <button class="btn button is-danger" id="searchBtn">Search</button>
     </div>
