@@ -6,10 +6,6 @@ var mainContEl = $('.mainContainer')
 var searchContEl = $('.searchContainer')
 
 // first we need to link the EONET API - using the function below?
-// EONET - EVENT API - pull Title, Description, Link, Categories, Closed, Geometry
-// API Events - Category, Status, Limit, Days, Start, End
-// Open Layers API
-// may have to use some type of Geocoding API for the address to lat/log portion
 
 // then link the Open Street Maps API and display a map on the remaining portion of the screen
 
@@ -34,48 +30,28 @@ var searchContEl = $('.searchContainer')
 
   -Also, would be cool if we could get pictures to show or a picture carousel. 
 */
+// abstract holiday
+var apiKey= "5356a3e909e34d7191915a86d8fcb3b6"
 
-
-
-fetch("https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365")
+// festivo api key  only get past years data
+//var apiKey = "f20c556217956a578c523219bd462b89"
+//var apiURL =`https://holidays.abstractapi.com/v1/?api_key=${apiKey}&country=US&year=2021&month=11&day=25 `;
+fetch("https://eonet.gsfc.nasa.gov/api/v2.1/events")
     .then(function(response){
         response.json().then(function(data){
             console.log(data)
-            console.log(typeof(data))
-            console.log(data.events)
-            console.log(data.events.length)
-            console.log(typeof(data.events))
-            for (i=0;i<data.events.length;i++){
-              //console.log(data.events[i].categories[0].title)
-             // console.log(data.events[i].title)
-              var location = data.events[i].title
-              // console.log(location.split(",")[1])
-              // console.log(typeof(location.split(",")[1]))
-              if(data.events[i].title.includes("United States")){
-                console.log(data.events[i].title)
-              //   console.log(location.split(",")[1])
-              }
-              
-            }
-            // console.log(data.events[0].categories[0].title)
-            // console.log(data.events[1].categories[0].title)
-            // console.log(data[0]) 
-            // console.log(data.length)  
-                    
+            
         });
     });
-    
 
-    
 //taken from Server-side APIs Activities 04. 
 function getApi() {
-    // Insert the EONET API url to get a list of your repos - need to insert the EONET API, and the Open Street Maps
-    var requestUrl = 'https://eonet.gsfc.nasa.gov/api/v3/events/geojson';
+    // Insert the API url to get a list of your repos - need to insert the EONET API, and the Open Street Maps
+    var requestUrl = 'https://api.github.com/users/jhara0994/repos';
   
     fetch(requestUrl)
       .then(function (response) {
         return response.json();
-        
       })
       .then(function (data) {
         //looping over the fetch response and inserting the URL of your repos into a list
@@ -92,27 +68,4 @@ function getApi() {
       });
   }
   
-  //taken from Server-side APIs Activities 04. 
-function getApi() {
-  // Insert the Open Street Maps API url to get a list of your repos - need to insert the EONET API, and the Open Street Maps
-  var requestUrl = 'https://api.openstreetmap.org/';
-
-  fetch(requestUrl)
-    .then(function (response) {
-      return response.json();
-    })
-    .then(function (data) {
-      //looping over the fetch response and inserting the URL of your repos into a list
-      for (var i = 0; i < data.length; i++) {
-        //Create a list element
-        var listItem = document.createElement('li');
-
-        //Set the text of the list element to the JSON response's .html_url property
-        listItem.textContent = data[i].html_url;
-
-        //Append the li element to the id associated with the ul element.
-        repoList.appendChild(listItem);
-      }
-    });
-}
 
