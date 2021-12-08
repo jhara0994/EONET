@@ -1,9 +1,11 @@
 var searchBox = $('#searchBox')
-var searchBtn = $('#searchBtn')
+var searchBtn = document.getElementById('searchBtn');
+//var searchBtn = $('#searchBtn');
 var compareBtn = $('#compareBtn')
-var results = $('#showResults')
+var results = document.getElementById('showResults')
 var mainContEl = $('.mainContainer')
 var searchContEl = $('.searchContainer')
+
 
 // first we need to link the EONET API - using the function below?
 // EONET - EVENT API - pull Title, Description, Link, Categories, Closed, Geometry
@@ -36,35 +38,95 @@ var searchContEl = $('.searchContainer')
 */
 
 
+/* Useful get data information 
+// get categories
+    //console.log(data.events[i].categories[0].title)
+ // get location
+    // console.log(data.events[i].title)
+// split location--> Siskiyou County (Antelope Fire), California, United States---> get [Siskiyou County (Antelope Fire)],[California], [United States]
+      // console.log(location.split(",")[1])
+      // console.log(typeof(location.split(",")[1]))
+//only locate united states
+      // if(data.events[i].title.includes("United States")){
+      //   console.log(data.events[i].title)
+      // //   console.log(location.split(",")[1])
+      // }
+*/
 
-fetch("https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365")
+var searchHandler = function(event){
+  //event.preventDefault();
+
+  var category = event.target.getAttribute("data-category")
+  console.log(category)
+  if(category){
+    getLocation(category);
+    
+  }
+
+  
+}
+
+
+
+  var getLocation = function (category) {
+    var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
+    fetch(apiURL)
     .then(function(response){
         response.json().then(function(data){
             console.log(data)
-            console.log(typeof(data))
+            displayLocation(data, category)
+           
             console.log(data.events)
-            console.log(data.events.length)
-            console.log(typeof(data.events))
-            for (i=0;i<data.events.length;i++){
-              //console.log(data.events[i].categories[0].title)
-             // console.log(data.events[i].title)
-              var location = data.events[i].title
-              // console.log(location.split(",")[1])
-              // console.log(typeof(location.split(",")[1]))
-              if(data.events[i].title.includes("United States")){
-                console.log(data.events[i].title)
-              //   console.log(location.split(",")[1])
-              }
-              
-            }
-            // console.log(data.events[0].categories[0].title)
-            // console.log(data.events[1].categories[0].title)
-            // console.log(data[0]) 
-            // console.log(data.length)  
+           // console.log(data.events.length)
                     
         });
     });
+  
+  // if(city){
+  //     getCityWeather(city);
+  //     get5Day(city);
+  //     // add city to the first of the array use cities.unshift(city); if add city to last element, use .push
+  //     cities.push(city);
+  //     // clear search 
+  //     cityInputEl.value = "";
+  // } else{
+  //     alert("Please enter a City");
+  // }
+  // saveSearch();
+  // pastSearch(city);
+  
+}
+
+// display location 
+var displayLocation = function(data, category){
+  results.innerHTML = ""
+  for (i=0;i<data.events.length;i++){
+   
+    var title = data.events[i].categories[0].title
+    if(title == category){
+     
     
+        var repoEl = document.createElement('div');
+        repoEl.classList = 'list-item flex-row justify-space-between align-center';
+    
+        var titleEl = document.createElement('span');
+        titleEl.textContent = data.events[i].title;
+    
+        repoEl.appendChild(titleEl);    
+        results.appendChild(repoEl);
+      }
+      console.log(data.events[i].title)
+      console.log(data.events[i].categories[0].title)
+      
+    }
+    
+    
+  }
+   
+
+searchBtn.addEventListener("click", searchHandler);
+
+
 
     
 //taken from Server-side APIs Activities 04. 
