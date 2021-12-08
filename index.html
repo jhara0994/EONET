@@ -9,11 +9,12 @@
     <!--Line below is for the CSS Framework of our choice-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
     <link rel="stylesheet" href="./assets/style.css">
+    <script type='text/javascript' src='https://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=AtgsjPdBqXinnMqK_3SeXYdZuneEZj52NH6iSmnnAtC7R-SYPYoUqqQ00Qac-aMx' async defer></script>
   </head>
 
   <body>
     <header>
-      <h1 class="title">Location Risk Factors</h1> 
+      <h1 class="title">Location Risk Factors</h1>
       <nav class="navbar">
         <a href="./index.html" class="navbar-item">Home</a>
         <a href="./results.html" class="navbar-item">Compare Results</a>
@@ -42,7 +43,7 @@
     <div class="compareContainer" id="compare">
     <button class="btn button is-warning" id="compareBtn">Compare Results</button>
     </div>
-
+    <div id="myMap" style='position:relative;width:800px;height:600px;'></div>
   </main>
 
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
