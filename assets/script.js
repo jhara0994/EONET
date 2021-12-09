@@ -6,6 +6,7 @@ var results = document.getElementById('showResults')
 var mainContEl = $('.mainContainer')
 var searchContEl = $('.searchContainer')
 var dropdown = document.querySelector('.dropdown');
+var counts = document.getElementById('showCount');
 
 // first we need to link the EONET API - using the function below?
 // EONET - EVENT API - pull Title, Description, Link, Categories, Closed, Geometry
@@ -103,27 +104,42 @@ var searchHandler = function(event){
 // display location 
 var displayLocation = function(data, category){
   results.innerHTML = ""
+  var eventCount =0;
   for (i=0;i<data.events.length;i++){
-   
+      
     var title = data.events[i].categories[0].title
     if(title == category){
-     
-    
+        eventCount++;
+      // create event list 
         var repoEl = document.createElement('div');
         repoEl.classList = 'list-item flex-row justify-space-between align-center';
     
         var titleEl = document.createElement('span');
         titleEl.textContent = data.events[i].title;
     
-        repoEl.appendChild(titleEl);    
+        repoEl.appendChild(titleEl);
+          
         results.appendChild(repoEl);
+        
       }
+      
       console.log(data.events[i].title)
       console.log(data.events[i].categories[0].title)
       
     }
+    // create event count
     
-    
+    var totalEl = document.createElement('div');
+    totalEl.classList = 'list-item flex-row justify-space-between align-center';
+
+    var countEl = document.createElement('span');
+    countEl.textContent = "Total event number: "+ eventCount;
+
+    console.log(totalEl)
+    console.log(document.querySelector("showCount"))
+    console.log(results)
+    totalEl.appendChild(countEl);  
+    counts.appendChild(totalEl)
   }
    
 
@@ -131,12 +147,48 @@ searchBtn.addEventListener("click", searchHandler);
 
 
 
-    
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //taken from Server-side APIs Activities 04. 
 function getApi() {
     // Insert the EONET API url to get a list of your repos - need to insert the EONET API, and the Open Street Maps
     var requestUrl = 'https://eonet.gsfc.nasa.gov/api/v3/events/geojson';
-  
+   
     fetch(requestUrl)
       .then(function (response) {
         return response.json();
@@ -145,6 +197,7 @@ function getApi() {
       .then(function (data) {
         //looping over the fetch response and inserting the URL of your repos into a list
         for (var i = 0; i < data.length; i++) {
+        
           //Create a list element
           var listItem = document.createElement('li');
   
