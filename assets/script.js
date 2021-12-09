@@ -5,7 +5,7 @@ var compareBtn = $('#compareBtn')
 var results = document.getElementById('showResults')
 var mainContEl = $('.mainContainer')
 var searchContEl = $('.searchContainer')
-
+var dropdown = document.querySelector('.dropdown');
 
 // first we need to link the EONET API - using the function below?
 // EONET - EVENT API - pull Title, Description, Link, Categories, Closed, Geometry
@@ -52,7 +52,10 @@ var searchContEl = $('.searchContainer')
       // //   console.log(location.split(",")[1])
       // }
 */
-
+dropdown.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown.classList.toggle('is-active');
+});
 var searchHandler = function(event){
   //event.preventDefault();
 
