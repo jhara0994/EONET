@@ -1,3 +1,4 @@
+/*
 var searchBox = $('#searchBox')
 var searchBtn = $('#searchBtn')
 var compareBtn = $('#compareBtn')
@@ -52,7 +53,7 @@ function getMap(){
   -Recent Events - use code from EONET to show the most recent 20 natural event occurrences.
 
   -Also, would be cool if we could get pictures to show or a picture carousel.
-*/
+
 
 
 
@@ -80,5 +81,20 @@ function getApi() {
         }
       });
   }
+*/
+ var map = new ol.Map({
+    target: 'map',
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+    ],
+    view: new ol.View({
+      center: ol.proj.fromLonLat([37.41, 8.82]),
+      zoom: 4
+    })
+  });
+  var map = new ol.Map();
 
-
+var map
+var map = new Microsoft.Maps.Map(document.getElementById('myMap'), {});

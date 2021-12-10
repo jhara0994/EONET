@@ -1,57 +1,61 @@
 body {
-    margin: 0;
-    background-color: rgb(193, 188, 183);
-    width: 100%;
-    background: linear-gradient( orange, black);
-    color: black;
+  margin: 0;
+  background-color: rgb(193, 188, 183);
+  width: 100%;
+  background: linear-gradient(orange, black);
+  color: black;
 }
 
 header {
-    padding-bottom: 20px;
-    padding-top: 5px;
+  padding-bottom: 20px;
+  padding-top: 5px;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 nav {
-    border: 2px solid black;
-    border-width: 2px 0;
-    list-style: none;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0;
-    width: 50%;
-    text-align: center;
+  border: 2px solid black;
+  border-width: 2px 0;
+  list-style: none;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0;
+  width: 50%;
+  text-align: center;
 }
 
 nav a {
-    display: inline-block;
-    padding: 10px;
-    text-align: center;
-    color: goldenrod;
+  display: inline-block;
+  padding: 10px;
+  text-align: center;
+  color: goldenrod;
 }
 
 .mainContainer {
-    text-align: center;
-    color: lightgoldenrodyellow
+  text-align: center;
+  color: lightgoldenrodyellow;
 }
 
 .searchContainer {
-    display: block;
+  display: block;
 }
 
 #searchBox {
-    display: inline-block;
-    padding: 30px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    text-align: center;
+  display: inline-block;
+  padding: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  text-align: center;
 }
 
 .compareContainer {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
+.map {
+  height: 400px;
+  width: 100%;
+}
