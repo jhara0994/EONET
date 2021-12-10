@@ -8,6 +8,7 @@
     <title>Disaster Risk Factors</title>
     <!--Line below is for the CSS Framework of our choice-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/style.css">
   </head>
 
@@ -16,9 +17,6 @@
       <h1 class="title">Disaster Risk Factors</h1> 
       <nav class="navbar">
         <a href="./index.html" class="navbar-item">Home</a>
-        <a href="./results.html" class="navbar-item">Compare Results</a>
-        <a href="" class="navbar-item">Highest Risk Factors</a>
-        <a href="" class="navbar-item">Lowest Risk Factors</a>
         <a href="" class="navbar-item">Recent Events</a>
       </nav>
     </header>
@@ -26,28 +24,42 @@
     <main class="mainContainer">
       <h3>This website is designed to determine natural event risk factors and help you determine if a location is safe enough for you! </h3>
       <p>Enter the desired disaster below to see the most recent occurrences.</p>
+      <div class="dropdown">
+        <div class="dropdown-trigger ">
+          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu3">
+            <span>Choose Categories</span>
+            <span class="icon is-small">
+              <i class="fas fa-angle-down" aria-hidden="true"></i>
+              <!-- <i class="fa fa-caret-down"></i> -->
+            </span>
+          </button>
+        </div>
+        <div class="dropdown-menu" id="dropdown-menu3" role="menu">
+          <div class="dropdown-content" id ="searchBtn">
+            <!-- <a href="#" class="dropdown-item" data-category="Sea and Lake Ice">
+              Sea and Lake Ice
+            </a> -->
+            <a href="#" class="dropdown-item" data-category="Sea and Lake Ice">
+              Sea and Lake Ice
+            </a>
+            <a href="#" class="dropdown-item" data-category="Severe Storms">
+              Severe Storms
+            </a>
+            <a href="#" class="dropdown-item" data-category="Volcanoes">
+              Volcanoes
+            </a>
+            <a href="#" class="dropdown-item" data-category="Wildfires">
+              Wildfires
+            </a>
+            <!-- <hr class="dropdown-divider">
+            <a href="#" class="dropdown-item">
+              More
+            </a> -->
+          </div>
+        </div>
+      </div>
 
-    <div class="searchContainer dropdown is-active column is-centered" id="form">
-      <form id="searchBox" class="search dropwdown-trigger">
-        <label class="form-label" data ="category" for="location"></label>
-        <input name="locSearch" id="locSearch" data="category" type="text" autofocus="true" class="input column is-one-quarter" placeholder="Enter category:"/>
-          <a class="Drought">Drought</a>
-          <a class="Dust-and-Haze">Dust/Haze</a>
-          <a class="Earthquakes">Earthquakes</a>
-          <a class="Floods">Floods</a>
-          <a class="Landslides">Landslides</a>
-          <a class="Manmade">Man-Made</a>
-          <a class="Sea-and-Lake-Ice">Sea and Lake Ice</a>
-          <a class='Severe Storms'>Severe Storms</a>
-          <a class="Snow">Snow</a>
-          <a class="Temperature-Extremes">Temperature Extremes</a>
-          <a class='Volcanos'>Volcanos</a>
-          <a class="Water-Color">Water-Color</a>
-          <a class="Wildfires">Wildfires</a>
-      </form>
-      <button class="btn button is-danger" id="searchBtn">Search</button>
-    </div>
-
+    <div class="results" id="showCount"></div>
     <div class="results" id="showResults"></div>
 
     <!--this can be hidden with CSS/Java until we have a second location to compare from localStorage.
