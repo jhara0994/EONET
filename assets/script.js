@@ -7,6 +7,7 @@ var dropdown = document.querySelector('.dropdown');
 var searchContEl = $('.searchContainer')
 var counts = document.getElementById('showCount');
 var map = $("#maps")
+var volcanoImg = document.querySelector('#volcano-img')
 
 
 // API Events - Category, Status, Limit, Days, Start, End
@@ -85,6 +86,7 @@ var displayLocation = function(data, category){
       console.log(data.events[i].categories[0].title)
       
     }
+
     // create event count
     counts.innerHTML = ""
     var totalEl = document.createElement('div');
@@ -102,13 +104,8 @@ var displayLocation = function(data, category){
 
 // function to show map on home page, maybe more.
 
-// function to pull Open Layers API and console log
-
-//function to fetch Mapquest API
-
-function showMap() {
-  var mapUrl = "http://map.positionstack.com/47.735549,-94.548447"
-  
-}
-
 searchBtn.addEventListener("click", searchHandler);
+
+
+// write a function to showLocation on onclick.
+// write a function to showImage/showFacts onclick.

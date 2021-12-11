@@ -55,3 +55,7 @@ nav a {
     padding-bottom: 10px;
 }
 
+.hide {
+    visibility: hidden;
+}
+
