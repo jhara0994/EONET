@@ -52,7 +52,61 @@ var counts = document.getElementById('showCount');
       //   console.log(data.events[i].title)
       // //   console.log(location.split(",")[1])
       // }
+
+  This a free weather api : https://www.weatherusa.net/services/weather-api
+  // google map api key:AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w
 */
+
+// Initialize and add the map
+function initMap() {
+  // // The location of Uluru
+  // const uluru = {
+  //   lat: 33.417201559,
+  //   lng:-110.861196043,
+  // };
+  // // The map, centered at Uluru
+  // const map = new google.maps.Map(document.getElementById("map"), {
+  //   zoom: 4,
+  //   center: uluru,
+  // });
+  // // The marker, positioned at Uluru
+  // const marker = new google.maps.Marker({
+  //   position: uluru,
+  //   map: map,
+  // });
+
+}
+
+// Drop mutiple markers 
+var mapMarkers = function(locations){
+
+  var LocationsForMap = locations;
+
+var map = new google.maps.Map(document.getElementById('map'), {
+  zoom: 2,
+  center: new google.maps.LatLng(28.704, 77.25),
+  mapTypeId: google.maps.MapTypeId.ROADMAP
+});
+
+var infowindow = new google.maps.InfoWindow();
+
+var marker, i;
+
+for (i = 0; i < LocationsForMap.length; i++) {  
+  marker = new google.maps.Marker({
+    position: new google.maps.LatLng(LocationsForMap[i][1], LocationsForMap[i][0]),
+    map: map
+  });
+
+  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    return function() {
+      infowindow.open(map, marker);
+    }
+  })(marker, i));
+}
+};
+
+// let the category button show category item when click 
 dropdown.addEventListener('click', function(event) {
   event.stopPropagation();
   dropdown.classList.toggle('is-active');
@@ -71,7 +125,7 @@ var searchHandler = function(event){
 }
 
 
-
+  //Fetching data from EONET, and t
   var getLocation = function (category) {
     var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
     fetch(apiURL)
@@ -105,6 +159,12 @@ var searchHandler = function(event){
 var displayLocation = function(data, category){
   results.innerHTML = ""
   var eventCount =0;
+  // display location by using google map 
+  // console.log('data-->: ', data)
+  var coordinates = data.events.map(list => list.categories[0].title ===  category && list.geometries[0].coordinates).filter(list=> !!list);
+  console.log('coordinates-->: ', coordinates)
+  mapMarkers(coordinates)
+  // Display location on list 
   for (i=0;i<data.events.length;i++){
       
     var title = data.events[i].categories[0].title
@@ -123,27 +183,30 @@ var displayLocation = function(data, category){
         
       }
       
-      console.log(data.events[i].title)
-      console.log(data.events[i].categories[0].title)
+      // console.log(data.events[i].title)
+      // console.log(data.events[i].categories[0].title)
       
     }
+    // Display event count 
     // create event count
-    
+    counts.innerHTML = ""
     var totalEl = document.createElement('div');
     totalEl.classList = 'list-item flex-row justify-space-between align-center';
 
     var countEl = document.createElement('span');
     countEl.textContent = "Total event number: "+ eventCount;
 
-    console.log(totalEl)
-    console.log(document.querySelector("showCount"))
-    console.log(results)
+    // console.log(totalEl)
+    // console.log(document.querySelector("showCount"))
+    // console.log(results)
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
   }
    
 
 searchBtn.addEventListener("click", searchHandler);
+
+https://api.openstreetmap.org
 
 
 
