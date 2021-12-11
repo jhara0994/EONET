@@ -7,6 +7,11 @@ var mainContEl = $('.mainContainer')
 var searchContEl = $('.searchContainer')
 var dropdown = document.querySelector('.dropdown');
 var counts = document.getElementById('showCount');
+// var modalButton = document.querySelector(".modal-button")
+// var showModal = document.querySelector(".modal")
+// var closeModal = document.querySelector(".modal-close")
+
+
 
 // first we need to link the EONET API - using the function below?
 // EONET - EVENT API - pull Title, Description, Link, Categories, Closed, Geometry
@@ -55,6 +60,18 @@ var counts = document.getElementById('showCount');
 
   This a free weather api : https://www.weatherusa.net/services/weather-api
   // google map api key:AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w
+
+  // // show modal
+// modalButton.addEventListener('click', function(event) {
+//   event.stopPropagation();
+//   showModal.classList.toggle('is-active');
+// });
+// //close modal
+
+// closeModal.addEventListener('click', function(event) {
+//   event.stopPropagation();
+//   showModal.classList.toggle('is-active');
+// });
 */
 
 // Initialize and add the map
@@ -77,33 +94,33 @@ function initMap() {
 
 }
 
-// Drop mutiple markers 
+// Drop multiple markers 
 var mapMarkers = function(locations){
 
   var LocationsForMap = locations;
 
-var map = new google.maps.Map(document.getElementById('map'), {
+  var map = new google.maps.Map(document.getElementById('map'), {
   zoom: 2,
   center: new google.maps.LatLng(28.704, 77.25),
   mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
-var infowindow = new google.maps.InfoWindow();
+  var infowindow = new google.maps.InfoWindow();
 
-var marker, i;
+  var marker, i;
 
-for (i = 0; i < LocationsForMap.length; i++) {  
-  marker = new google.maps.Marker({
+  for (i = 0; i < LocationsForMap.length; i++) {  
+    marker = new google.maps.Marker({
     position: new google.maps.LatLng(LocationsForMap[i][1], LocationsForMap[i][0]),
     map: map
-  });
+    });
 
-  google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
     return function() {
       infowindow.open(map, marker);
     }
-  })(marker, i));
-}
+    })(marker, i));
+  }
 };
 
 // let the category button show category item when click 
@@ -111,6 +128,9 @@ dropdown.addEventListener('click', function(event) {
   event.stopPropagation();
   dropdown.classList.toggle('is-active');
 });
+
+
+
 var searchHandler = function(event){
   //event.preventDefault();
 
@@ -124,14 +144,17 @@ var searchHandler = function(event){
   
 }
 
+//Fetch data from MapRequest
 
-  //Fetching data from EONET, and t
-  var getLocation = function (category) {
+
+//Fetching data from EONET
+var getLocation = function (category) {
     var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
     fetch(apiURL)
     .then(function(response){
         response.json().then(function(data){
             console.log(data)
+            //displayLocation(data, category)
             displayLocation(data, category)
            
             console.log(data.events)
@@ -139,7 +162,38 @@ var searchHandler = function(event){
                     
         });
     });
-  
+  // Google map data fetch
+}
+  var googleMap = function (lngLat) {
+    console.log("lngLast---->", lngLat)
+    
+
+    var apiURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lngLat[1]},${lngLat[0]}&location_type=APPROXIMATE&key=AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w`
+    
+    fetch(apiURL)
+    .then(function(response){
+        response.json().then(function(data){
+            console.log("show filter data--->", data)
+            // create event list 
+          var repoEl = document.createElement('div');
+          repoEl.classList = 'list-item flex-row justify-space-between align-center';
+    
+          var titleEl = document.createElement('span');
+          titleEl.textContent = data.results[0].formatted_address;
+    
+          repoEl.appendChild(titleEl);
+          
+          results.appendChild(repoEl);
+            //displayLocation(data, category)
+           
+            //console.log(data.events)
+           // console.log(data.events.length)
+                    
+        });
+    });
+    
+
+   
   // if(city){
   //     getCityWeather(city);
   //     get5Day(city);
@@ -164,37 +218,47 @@ var displayLocation = function(data, category){
   var coordinates = data.events.map(list => list.categories[0].title ===  category && list.geometries[0].coordinates).filter(list=> !!list);
   console.log('coordinates-->: ', coordinates)
   mapMarkers(coordinates)
+
   // Display location on list 
   for (i=0;i<data.events.length;i++){
       
     var title = data.events[i].categories[0].title
-    if(title == category){
+    
+    // show address category is not Sea and Lake Ice
+    if(title == category && title!== "Sea and Lake Ice"){
         eventCount++;
-      // create event list 
+        var lngLat = data.events[i].geometries[0].coordinates
+        console.log(lngLat)
+        googleMap(lngLat);
+        console.log(data.events[i].title)
+        //show address category is Sea and Lake Ice
+    }else if(title == category && title == "Sea and Lake Ice"){
+        console.log("iceberg: ", data.events[i].title)
+        eventCount++;
+        // create events list 
         var repoEl = document.createElement('div');
-        repoEl.classList = 'list-item flex-row justify-space-between align-center';
+          repoEl.classList = 'list-item flex-row justify-space-between align-center';
     
-        var titleEl = document.createElement('span');
-        titleEl.textContent = data.events[i].title;
+          var titleEl = document.createElement('span');
+          titleEl.textContent = data.events[i].title;
     
-        repoEl.appendChild(titleEl);
+          repoEl.appendChild(titleEl);
           
-        results.appendChild(repoEl);
-        
-      }
+          results.appendChild(repoEl);
+    }
       
       // console.log(data.events[i].title)
       // console.log(data.events[i].categories[0].title)
       
     }
-    // Display event count 
-    // create event count
+    
+    // create event count& display event count
     counts.innerHTML = ""
     var totalEl = document.createElement('div');
     totalEl.classList = 'list-item flex-row justify-space-between align-center';
 
     var countEl = document.createElement('span');
-    countEl.textContent = "Total event number: "+ eventCount;
+    countEl.textContent = "There are "+ eventCount +" reported events";
 
     // console.log(totalEl)
     // console.log(document.querySelector("showCount"))
@@ -206,7 +270,7 @@ var displayLocation = function(data, category){
 
 searchBtn.addEventListener("click", searchHandler);
 
-https://api.openstreetmap.org
+
 
 
 
