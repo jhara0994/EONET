@@ -105,14 +105,28 @@ var mapMarkers = function(locations){
   mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
-  var infowindow = new google.maps.InfoWindow();
+  // var infowindow = new google.maps.InfoWindow();
 
   var marker, i;
 
-  for (i = 0; i < LocationsForMap.length; i++) {  
+  for (i = 0; i < LocationsForMap.length; i++) {
+    // console.log(`i--${i}-->: `, LocationsForMap[i])
+    const geoCoordinates = LocationsForMap[i].geometries[0].coordinates;
+    const geoTitle = LocationsForMap[i]['title'];
     marker = new google.maps.Marker({
-    position: new google.maps.LatLng(LocationsForMap[i][1], LocationsForMap[i][0]),
+    position: new google.maps.LatLng(geoCoordinates[1], geoCoordinates[0]),
     map: map
+    });
+
+    const contentString = (locationName) => `
+      <div id="content">
+        <div id="siteNotice"> </div>
+          <h1 id="firstHeading" class="firstHeading" style="color: black;">${locationName}</h1>
+      </div>  
+    `;
+
+    const infowindow = new google.maps.InfoWindow({
+    content: contentString(geoTitle), 
     });
 
     google.maps.event.addListener(marker, 'click', (function(marker, i) {
@@ -215,7 +229,9 @@ var displayLocation = function(data, category){
   var eventCount =0;
   // display location by using google map 
   // console.log('data-->: ', data)
-  var coordinates = data.events.map(list => list.categories[0].title ===  category && list.geometries[0].coordinates).filter(list=> !!list);
+  // var coordinates = data.events.map(list => list.categories[0].title ===  category && list.geometries[0].coordinates).filter(list=> !!list);
+  var coordinates = data.events.filter(list => list.categories[0].title ===  category && list.geometries[0].coordinates);
+
   console.log('coordinates-->: ', coordinates)
   mapMarkers(coordinates)
 
