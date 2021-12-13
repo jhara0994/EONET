@@ -1,3 +1,9 @@
+:root {
+ 
+  --border-radius: .3rem;
+}
+
+
 body {
     margin: 0;
     background-color: rgb(193, 188, 183);
@@ -57,4 +63,17 @@ nav a {
 
 .map {
     height: 600px;
+}
+
+.btn-back{
+   color:white
+
+} 
+.list-item {
+    margin-bottom: 10px;
+   
+    /* border-radius:var(--border-radius) ; */
+    /* background-color: var(--light-dark); */
+    /* color: var(--primary); */
+    text-decoration: none;
 }

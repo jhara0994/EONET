@@ -1,16 +1,14 @@
-var searchBox = $('#searchBox')
+
 var searchBtn = document.getElementById('searchBtn');
-//var searchBtn = $('#searchBtn');
-var compareBtn = $('#compareBtn')
+
+
 var results = document.getElementById('showResults')
-var mainContEl = $('.mainContainer')
-var searchContEl = $('.searchContainer')
+
+
 var dropdown = document.querySelector('.dropdown');
 var counts = document.getElementById('showCount');
-// var modalButton = document.querySelector(".modal-button")
-// var showModal = document.querySelector(".modal")
-// var closeModal = document.querySelector(".modal-close")
-
+var recentEvent = document.getElementById('recent-event');
+var recentResults = document.getElementById('recentResults')
 
 
 // first we need to link the EONET API - using the function below?
@@ -72,6 +70,9 @@ var counts = document.getElementById('showCount');
 //   event.stopPropagation();
 //   showModal.classList.toggle('is-active');
 // });
+// var modalButton = document.querySelector(".modal-button")
+// var showModal = document.querySelector(".modal")
+// var closeModal = document.querySelector(".modal-close")
 */
 
 // Initialize and add the map
@@ -118,13 +119,14 @@ var mapMarkers = function(locations){
     map: map
     });
 
+    // And infowindow on map 
     const contentString = (locationName) => `
       <div id="content">
         <div id="siteNotice"> </div>
           <h1 id="firstHeading" class="firstHeading" style="color: black;">${locationName}</h1>
       </div>  
     `;
-
+    
     const infowindow = new google.maps.InfoWindow({
     content: contentString(geoTitle), 
     });
@@ -137,16 +139,11 @@ var mapMarkers = function(locations){
   }
 };
 
-// let the category button show category item when click 
-dropdown.addEventListener('click', function(event) {
-  event.stopPropagation();
-  dropdown.classList.toggle('is-active');
-});
 
 
 
 var searchHandler = function(event){
-  //event.preventDefault();
+  event.preventDefault();
 
   var category = event.target.getAttribute("data-category")
   console.log(category)
@@ -158,7 +155,7 @@ var searchHandler = function(event){
   
 }
 
-//Fetch data from MapRequest
+
 
 
 //Fetching data from EONET
@@ -176,7 +173,7 @@ var getLocation = function (category) {
                     
         });
     });
-  // Google map data fetch
+  
 }
   var googleMap = function (lngLat) {
     console.log("lngLast---->", lngLat)
@@ -282,11 +279,24 @@ var displayLocation = function(data, category){
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
   }
-   
+  // show recent events
+  var showRecent = function(event){
+
+    event.preventDefault();
+    document.location.href = "./results.html";
+    
+    
+  }
+
 
 searchBtn.addEventListener("click", searchHandler);
+recentEvent.addEventListener("click", showRecent);
 
-
+// let the category button show category item when click 
+dropdown.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown.classList.toggle('is-active');
+});
 
 
 
