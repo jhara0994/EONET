@@ -2,11 +2,13 @@ var searchBox = $('#searchBox')
 var searchBtn = document.getElementById('searchBtn');
 //var searchBtn = $('#searchBtn');
 var compareBtn = $('#compareBtn')
+var compareResults = document.querySelector('#compare-results')
 var results = document.getElementById('showResults')
 var mainContEl = $('.mainContainer')
 var searchContEl = $('.searchContainer')
 var dropdown = document.querySelector('.dropdown');
 var counts = document.getElementById('showCount');
+var maps = document.querySelector('#maps')
 
 // first we need to link the EONET API - using the function below?
 // EONET - EVENT API - pull Title, Description, Link, Categories, Closed, Geometry
@@ -57,6 +59,11 @@ var counts = document.getElementById('showCount');
 
 // Initialize and add the map
 function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: -34.397, lng: 150.644 },
+    zoom: 8,
+  })
+}
   // // The location of Uluru
   // const uluru = {
   //   lat: 33.417201559,
@@ -73,14 +80,14 @@ function initMap() {
   //   map: map,
   // });
 
-}
+maps.textContent = initMap()
 
 // Drop mutiple markers 
 var mapMarkers = function(locations){
 
   var LocationsForMap = locations;
 
-var map = new google.maps.Map(document.getElementById('map'), {
+var map =  google.maps.Map(document.getElementById('map'), {
   zoom: 2,
   center: new google.maps.LatLng(28.704, 77.25),
   mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -120,9 +127,6 @@ var searchHandler = function(event){
   }
 
   
-}
-
-
   //Fetching data from EONET, and t
   var getLocation = function (category) {
     var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
@@ -200,81 +204,14 @@ var displayLocation = function(data, category){
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
   }
-   
-
-searchBtn.addEventListener("click", searchHandler);
-
-https://api.openstreetmap.org
+}
 
 
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//taken from Server-side APIs Activities 04. 
-function getApi() {
-    // Insert the EONET API url to get a list of your repos - need to insert the EONET API, and the Open Street Maps
-    var requestUrl = 'https://eonet.gsfc.nasa.gov/api/v3/events/geojson';
-   
-    fetch(requestUrl)
-      .then(function (response) {
-        return response.json();
-        
-      })
-      .then(function (data) {
-        //looping over the fetch response and inserting the URL of your repos into a list
-        for (var i = 0; i < data.length; i++) {
-        
-          //Create a list element
-          var listItem = document.createElement('li');
-  
-          //Set the text of the list element to the JSON response's .html_url property
-          listItem.textContent = data[i].html_url;
-  
-          //Append the li element to the id associated with the ul element.
-          repoList.appendChild(listItem);
-        }
-      });
-  }
-  
-  //taken from Server-side APIs Activities 04. 
-function getApi() {
-  // Insert the Open Street Maps API url to get a list of your repos - need to insert the EONET API, and the Open Street Maps
-  var requestUrl = 'https://api.openstreetmap.org/';
+    //taken from Server-side APIs Activities 04. 
+function getGoogleMaps() {
+  // Insert the Open Street Maps API url  - need to insert the EONET API, and the Open Street Maps
+  var apiKey = 'AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w'
+  var requestUrl = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=40.714224,-73.961452&key=YOUR_API_KEY';
 
   fetch(requestUrl)
     .then(function (response) {
@@ -290,7 +227,30 @@ function getApi() {
         listItem.textContent = data[i].html_url;
 
         //Append the li element to the id associated with the ul element.
-        repoList.appendChild(listItem);
+        results.appendChild(listItem);
       }
-    });
+    })
+  }
+
+searchBtn.addEventListener("click", searchHandler);
+searchBtn.addEventListener("click", getGoogleMaps);
+
+// For tomorrow, I am writing the stored event numbers into localStorage and pulling them on the compare button page. 
+function storeScore() {
+  localStorage.setItem("category", JSON.stringify(score))
+  localStorage.setItem("number", JSON.stringify(counts))
 }
+
+function getScore() {
+  var storedCat = JSON.parse(localStorage.getItem("category"))
+  var storedCount = JSON.parse(localStorage.getItem("number"))
+
+  compareResults.textContent = storedCat + storedCount
+}
+
+// eventCount on line 247 and 277
+// most recent event linked to Recent Events
+// style - image under drop-downs and columns for the data
+// CSS media queries to be added.
+
+// For Tuesday, finish coding to main and ensure it displays on 

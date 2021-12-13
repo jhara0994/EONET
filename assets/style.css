@@ -13,6 +13,34 @@ header {
 
 h1 {
     text-align: center;
+    font-weight: bolder;
+    text-decoration: underline 3px black;
+    padding-top: 10px;
+    transform: skewX(-15deg);
+    animation: fadeIn 3s;
+    -webkit-animation: fadein 3s; 
+    -moz-animation: fadein 3s;
+     -ms-animation: fadein 3s;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-moz-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-ms-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadein {
+    from {opacity: 0; }
+    to   {opacity: 1; }
 }
 
 nav {
@@ -24,6 +52,30 @@ nav {
     padding: 0;
     width: 50%;
     text-align: center;
+    animation: fadeIn 5s;
+    -webkit-animation: fadein 5s; 
+    -moz-animation: fadein 5s;
+    -ms-animation: fadein 5s;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-moz-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-ms-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadein {
+    from {opacity: 0; }
+    to   {opacity: 1; }
 }
 
 nav a {
@@ -54,5 +106,6 @@ nav a {
 .compareContainer {
     padding-bottom: 10px;
 }
+
 
 
