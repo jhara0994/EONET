@@ -14,7 +14,7 @@ var showRecentList =  function(){
             repoEl.classList = 'has-text-white has-text-centered list-item flex-row justify-space-between align-center';
  
             var titleEl = document.createElement('span');
-            titleEl.textContent = data.events[i].title + " at "+ moment(data.events[i].geometries[0].date).format('MMMM Do YYYY, h:mm:ss a');
+            titleEl.textContent = data.events[i].title + " on "+ moment(data.events[i].geometries[0].date).format('MMMM Do YYYY, h:mm:ss a');
  
             repoEl.appendChild(titleEl);
        
