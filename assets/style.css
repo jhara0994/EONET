@@ -17,10 +17,10 @@ h1 {
     text-decoration: underline 3px black;
     padding-top: 10px;
     transform: skewX(-15deg);
-    animation: fadeIn 3s;
-    -webkit-animation: fadein 3s; 
-    -moz-animation: fadein 3s;
-     -ms-animation: fadein 3s;
+    animation: fadeIn 2s;
+    -webkit-animation: fadein 2s; 
+    -moz-animation: fadein 2s;
+     -ms-animation: fadein 2s;
 }
 
 @keyframes fadein {
@@ -52,10 +52,10 @@ nav {
     padding: 0;
     width: 50%;
     text-align: center;
-    animation: fadeIn 5s;
-    -webkit-animation: fadein 5s; 
-    -moz-animation: fadein 5s;
-    -ms-animation: fadein 5s;
+    animation: fadeIn 4s;
+    -webkit-animation: fadein 4s; 
+    -moz-animation: fadein 4s;
+    -ms-animation: fadein 4s;
 }
 
 @keyframes fadein {
@@ -74,8 +74,8 @@ nav {
 }
 
 @-webkit-keyframes fadein {
-    from {opacity: 0; }
-    to   {opacity: 1; }
+    from {opacity: 0;}
+    to   {opacity: 1;}
 }
 
 nav a {
@@ -85,9 +85,40 @@ nav a {
     color: goldenrod;
 }
 
+main{
+    animation: fadeIn 6s;
+    -webkit-animation: fadein 6s; 
+    -moz-animation: fadein 6s;
+    -ms-animation: fadein 6s;
+}
+
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-moz-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-ms-keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@-webkit-keyframes fadein {
+    from {opacity: 0;}
+    to   {opacity: 1;}
+}
+
 .mainContainer {
     text-align: center;
     color: lightgoldenrodyellow
+}
+
+.website-info {
+    padding-bottom: 15px;
 }
 
 .searchContainer {
