@@ -1,14 +1,12 @@
 
 var searchBtn = document.getElementById('searchBtn');
-
-
-var results = document.getElementById('showResults')
-
-
+var results = document.getElementById('showResults');
 var dropdown = document.querySelector('.dropdown');
 var counts = document.getElementById('showCount');
 var recentEvent = document.getElementById('recent-event');
-var recentResults = document.getElementById('recentResults')
+var recentResults = document.getElementById('recentResults');
+var pastSearchButtonEl = document.querySelector("#past-search-buttons");
+var categories = []
 
 
 // first we need to link the EONET API - using the function below?
@@ -77,25 +75,10 @@ var recentResults = document.getElementById('recentResults')
 
 // Initialize and add the map
 function initMap() {
-  // // The location of Uluru
-  // const uluru = {
-  //   lat: 33.417201559,
-  //   lng:-110.861196043,
-  // };
-  // // The map, centered at Uluru
-  // const map = new google.maps.Map(document.getElementById("map"), {
-  //   zoom: 4,
-  //   center: uluru,
-  // });
-  // // The marker, positioned at Uluru
-  // const marker = new google.maps.Marker({
-  //   position: uluru,
-  //   map: map,
-  // });
-
+  
 }
 
-// Drop multiple markers 
+// Drop multiple markers on Google Map
 var mapMarkers = function(locations){
 
   var LocationsForMap = locations;
@@ -141,19 +124,20 @@ var mapMarkers = function(locations){
 
 
 
-
+// Click catergory start run function 
 var searchHandler = function(event){
   event.preventDefault();
 
   var category = event.target.getAttribute("data-category")
-  console.log(category)
+  // console.log(category)
   if(category){
     getLocation(category);
-    
-  }
+    if (categories.includes(category) === false) categories.push(category);
 
-  
-}
+  }
+  saveSearch();
+  pastSearch(category);
+ }
 
 
 
@@ -164,27 +148,27 @@ var getLocation = function (category) {
     fetch(apiURL)
     .then(function(response){
         response.json().then(function(data){
-            console.log(data)
+            // console.log(data)
             //displayLocation(data, category)
             displayLocation(data, category)
            
-            console.log(data.events)
+            // console.log(data.events)
            // console.log(data.events.length)
                     
         });
     });
   
 }
-  var googleMap = function (lngLat) {
-    console.log("lngLast---->", lngLat)
-    
 
+// Fetch data from Google Map
+  var googleMap = function (lngLat) {
+    // console.log("lngLast---->", lngLat)
     var apiURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lngLat[1]},${lngLat[0]}&location_type=APPROXIMATE&key=AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w`
     
     fetch(apiURL)
     .then(function(response){
         response.json().then(function(data){
-            console.log("show filter data--->", data)
+            // console.log("show filter data--->", data)
             // create event list 
           var repoEl = document.createElement('div');
           repoEl.classList = 'list-item flex-row justify-space-between align-center';
@@ -202,22 +186,6 @@ var getLocation = function (category) {
                     
         });
     });
-    
-
-   
-  // if(city){
-  //     getCityWeather(city);
-  //     get5Day(city);
-  //     // add city to the first of the array use cities.unshift(city); if add city to last element, use .push
-  //     cities.push(city);
-  //     // clear search 
-  //     cityInputEl.value = "";
-  // } else{
-  //     alert("Please enter a City");
-  // }
-  // saveSearch();
-  // pastSearch(city);
-  
 }
 
 // display location 
@@ -225,11 +193,10 @@ var displayLocation = function(data, category){
   results.innerHTML = ""
   var eventCount =0;
   // display location by using google map 
-  // console.log('data-->: ', data)
-  // var coordinates = data.events.map(list => list.categories[0].title ===  category && list.geometries[0].coordinates).filter(list=> !!list);
+ 
   var coordinates = data.events.filter(list => list.categories[0].title ===  category && list.geometries[0].coordinates);
 
-  console.log('coordinates-->: ', coordinates)
+  // console.log('coordinates-->: ', coordinates)
   mapMarkers(coordinates)
 
   // Display location on list 
@@ -238,32 +205,25 @@ var displayLocation = function(data, category){
     var title = data.events[i].categories[0].title
     
     // show address category is not Sea and Lake Ice
-    if(title == category && title!== "Sea and Lake Ice"){
+    if(title == category && title !== "Sea and Lake Ice"){
         eventCount++;
         var lngLat = data.events[i].geometries[0].coordinates
-        console.log(lngLat)
+        
         googleMap(lngLat);
-        console.log(data.events[i].title)
+        //console.log(data.events[i].title)
         //show address category is Sea and Lake Ice
     }else if(title == category && title == "Sea and Lake Ice"){
-        console.log("iceberg: ", data.events[i].title)
+        // console.log("iceberg: ", data.events[i].title)
         eventCount++;
         // create events list 
         var repoEl = document.createElement('div');
-          repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    
-          var titleEl = document.createElement('span');
-          titleEl.textContent = data.events[i].title;
-    
-          repoEl.appendChild(titleEl);
-          
-          results.appendChild(repoEl);
-    }
-      
-      // console.log(data.events[i].title)
-      // console.log(data.events[i].categories[0].title)
-      
-    }
+        repoEl.classList = 'list-item flex-row justify-space-between align-center';
+        var titleEl = document.createElement('span');
+        titleEl.textContent = data.events[i].title;
+        repoEl.appendChild(titleEl);
+        results.appendChild(repoEl);
+    }  
+  }
     
     // create event count& display event count
     counts.innerHTML = ""
@@ -273,9 +233,7 @@ var displayLocation = function(data, category){
     var countEl = document.createElement('span');
     countEl.textContent = "There are "+ eventCount +" reported events";
 
-    // console.log(totalEl)
-    // console.log(document.querySelector("showCount"))
-    // console.log(results)
+    
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
   }
@@ -288,10 +246,48 @@ var displayLocation = function(data, category){
     
   }
 
+// save search by using Local Storage
+var saveSearch = function(){
+  // console.log(categories)
+  localStorage.setItem("categories", JSON.stringify(categories));
+};
+
+// show search category on webpage
+var pastSearch = function(category){
+ 
+  // console.log(pastSearch)
+  var pastCategories = JSON.parse(localStorage.getItem("categories"));
+  //console.log(pastCities)
+  //clear search history 
+  pastSearchButtonEl.innerHTML = "";
+  for (i=0; i<pastCategories.length; i++){
+
+  pastSearchEl = document.createElement("span");
+  pastButtonEl= document.createElement("a")
+  pastButtonEl.textContent = pastCategories[i];
+  pastSearchEl.classList = "d-flex w-100 btn-light border p-2";
+  pastButtonEl.setAttribute("data-categories",pastCategories[i])
+  pastSearchEl.setAttribute("type", "submit");
+  pastSearchEl.appendChild(pastButtonEl);
+  pastSearchButtonEl.appendChild(pastSearchEl);
+  }
+}
+
+// show past search events
+var pastSearchHandler = function(event){
+  event.preventDefault();
+  // console.log("past search? work?--->",event.target )
+  var category2 = event.target.getAttribute("data-categories")
+  // console.log("worked?--->", category2)
+  if(category2){
+    // console.log("past search-->", category2)
+      getLocation(category2)
+  }
+}
 
 searchBtn.addEventListener("click", searchHandler);
 recentEvent.addEventListener("click", showRecent);
-
+pastSearchButtonEl.addEventListener("click", pastSearchHandler);
 // let the category button show category item when click 
 dropdown.addEventListener('click', function(event) {
   event.stopPropagation();
