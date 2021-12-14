@@ -16,7 +16,7 @@
 
   <body>
     <header>
-      <h1 class="title">Disaster Factor</h1> 
+      <h1 class="is-size-1">Disaster Factor</h1> 
       <nav class="navbar level">
         <a href="./index.html" class="navbar-item level-item">Home</a>
         <a href="./assets/compare.html" class="navbar-item level-item">Compare Disasters</a>
@@ -42,7 +42,7 @@
       
       <div class="dropdown">
         <div class="dropdown-trigger">
-          <button class="button is-danger" aria-haspopup="true" aria-controls="dropdown-menu3">
+          <button class="button is-danger" id="hover-btn" aria-haspopup="true" aria-controls="dropdown-menu3">
             <span>Choose Categories</span>
             <span class="icon is-small">
               <i class="fas fa-angle-down" aria-hidden="true"></i>
@@ -96,13 +96,7 @@
       <div class="results" id="showCount"></div>
       <div class="results" id="showResults"></div>
 
-        this can be hidden with CSS/Java until we have a second location to compare from localStorage.
-        We can also href this result to the results.html if we choose.
-      <div class="compareContainer" id="compare">
-        <button class="btn button is-warning" id="compareBtn">Compare Results</button>
-      </div> 
-
-      <h3>My Google Maps Demo</h3>
+      <h3>Google Maps</h3>
       
       <!--The div element for the map -->
       <div id="map" class="map"></div>
