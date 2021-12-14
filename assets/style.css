@@ -129,6 +129,11 @@ main{
     margin-bottom: 15px;
 }
 
+#hover-btn:hover {
+    background-color: yellow;
+    color: black;
+}
+
 #searchBox {
     display: inline-block;
     padding: 30px;
