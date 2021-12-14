@@ -3,6 +3,7 @@ body {
     background-color: rgb(193, 188, 183);
     width: 100%;
     background: linear-gradient( orange, black);
+    background-image: url('https://images.unsplash.com/photo-1507680465142-ef2223e23308?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8ZGlzYXN0ZXJ8ZW58MHx8MHx8&w=1000&q=80');
     color: black;
 }
 
@@ -85,6 +86,10 @@ nav a {
     color: goldenrod;
 }
 
+.navbar a:hover {
+    color: red;
+}
+
 main{
     animation: fadeIn 6s;
     -webkit-animation: fadein 6s; 
@@ -129,6 +134,10 @@ main{
     margin-bottom: 15px;
 }
 
+i {
+    padding-right: 2px;
+}
+
 #hover-btn:hover {
     background-color: yellow;
     color: black;
@@ -142,10 +151,18 @@ main{
     width: 100%;
     text-align: center;
 }
-
 .compareContainer {
     padding-bottom: 10px;
 }
 
+.column {
+    font-weight: bold;
+    margin-right: 300px;
+    margin-left: 300px;
+    color: yellow;
+    text-decoration: underline;
+    padding-top: 10px;
+    padding-bottom: 30px;
+}
 
 

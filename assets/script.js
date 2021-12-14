@@ -10,6 +10,8 @@ var recentEvent = document.getElementById('recent-event');
 var recentResults = document.getElementById('recentResults')
 
 
+
+
 /*
   Bonus: if we can complete this in time, we could code some stuff for the NavBar. If you have any suggestions for what the NavBar should include let me know. My ideas are below:
   -Recent Events - use code from EONET to show the most recent 20 natural event occurrences.
@@ -244,8 +246,11 @@ function storeScore() {
 }
 
 function getScore() {
+  var compareResults = document.querySelector("#compare-disaster")
+  var compareCount = document.querySelector('#compare-count')
   var storedCat = JSON.parse(localStorage.getItem("category"))
   var storedCount = JSON.parse(localStorage.getItem("number"))
 
-  compareResults.textContent = storedCat + storedCount
+  compareResults.appendChild = storedCat 
+  compareCount.appendChild = storedCount
 }
