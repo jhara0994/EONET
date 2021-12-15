@@ -167,7 +167,13 @@ var displayLocation = function(data, category){
     totalEl.classList = 'list-item flex-row justify-space-between align-center';
 
     var countEl = document.createElement('span');
-    countEl.textContent = "There are "+ eventCount +" reported events";
+
+    if(category === "Sea and Lake Ice") {
+    countEl.textContent = "There are "+ eventCount +" "+ category+" "+"events reported!";
+    } else {
+      countEl.textContent = "There are " + eventCount +" "+category+" "+"reported!"
+    }
+
 
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
@@ -205,11 +211,9 @@ var displayLocation = function(data, category){
 
   var pastSearchHandler = function(event){
     event.preventDefault();
-    // console.log("past search? work?--->",event.target )
     var category2 = event.target.getAttribute("data-categories")
-    // console.log("worked?--->", category2)
+    
     if(category2){
-      // console.log("past search-->", category2)
         getLocation(category2)
     }
   }
