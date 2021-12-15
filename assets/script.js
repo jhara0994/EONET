@@ -1,111 +1,242 @@
-var searchBox = $('#searchBox')
 var searchBtn = document.getElementById('searchBtn');
-var compareBtn = $('#compareBtn')
 var results = document.getElementById('showResults')
-var mainContEl = $('.mainContainer')
 var dropdown = document.querySelector('.dropdown');
-var searchContEl = $('.searchContainer')
 var counts = document.getElementById('showCount');
-var map = $("#maps")
-var volcanoImg = document.querySelector('#volcano-img')
+var recentEvent = document.getElementById('recent-event');
+var recentResults = document.getElementById('recentResults');
+var pastSearchButtonEl = document.querySelector("#past-search-buttons");
+var googleMsg = document.querySelector('.google-message')
+var categories = []
 
+// Initialize and add the map
+function initMap() {
 
-// API Events - Category, Status, Limit, Days, Start, End
+}
 
-// Open Street Maps API
-// may have to use some type of Geocoding API for the address to lat/log portion
-// then link the Open Street Maps API and display a map on the remaining portion of the screen
+// Drop multiple markers 
+function initMap() {
+  
+}
 
-// try to pinpoint locations on a map with Open Street Maps with search. 
+// Drop multiple markers on Google Map
+var mapMarkers = function(locations){
 
-// Compare Btn - then we will need to write a function that will pull the localStorage items when the Compare button is pressed. 
-// we will need to include a filter on the Compared Results. 
-// I created a separate page for the Compared Results if we need to use. 
+  var LocationsForMap = locations;
 
-/*
-  Bonus: if we can complete this in time, we could code some stuff for the NavBar. If you have any suggestions for what the NavBar should include let me know. My ideas are below:
-  -Highest Risk Factor (Most Dangerous) - we would have to use code from EONET to determine the top 5 places for natural even occurrences.
-  -Lowest Risk Factor (Safest) - we would have to use code from EONET to determine the last 5 places for natural even occurrences.
-  -Recent Events - use code from EONET to show the most recent 20 natural event occurrences.
-
-  -Also, would be cool if we could get pictures to show or a picture carousel. 
-*/
-
-dropdown.addEventListener('click', function(event) {
-  event.stopPropagation();
-  dropdown.classList.toggle('is-active');
+  var map = new google.maps.Map(document.getElementById('map'), {
+  zoom: 2,
+  center: new google.maps.LatLng(28.704, 77.25),
+  mapTypeId: google.maps.MapTypeId.ROADMAP
 });
+
+  // var infowindow = new google.maps.InfoWindow();
+
+  var marker, i;
+
+  for (i = 0; i < LocationsForMap.length; i++) {
+    // console.log(`i--${i}-->: `, LocationsForMap[i])
+    const geoCoordinates = LocationsForMap[i].geometries[0].coordinates;
+    const geoTitle = LocationsForMap[i]['title'];
+    marker = new google.maps.Marker({
+    position: new google.maps.LatLng(geoCoordinates[1], geoCoordinates[0]),
+    map: map
+    });
+
+    // And infowindow on map 
+    const contentString = (locationName) => `
+      <div id="content">
+        <div id="siteNotice"> </div>
+          <h1 id="firstHeading" class="firstHeading" style="color: black;">${locationName}</h1>
+      </div>  
+    `;
+    
+    const infowindow = new google.maps.InfoWindow({
+    content: contentString(geoTitle), 
+    });
+
+    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    return function() {
+      infowindow.open(map, marker);
+    }
+    })(marker, i));
+  }
+};
+
+
+
 var searchHandler = function(event){
-  //event.preventDefault();
+  event.preventDefault();
 
   var category = event.target.getAttribute("data-category")
   console.log(category)
   if(category){
     getLocation(category);
+    if (categories.includes(category) === false) categories.push(category);
+
   }
-}
+  googleMsg.classList.add('hide')
+  saveSearch();
+  pastSearch(category);
+ }
 
+
+//Fetching data from EONET
 var getLocation = function (category) {
-  var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
-  fetch(apiURL)
-  .then(function(response){
-      response.json().then(function(data){
-          console.log(data)
-          displayLocation(data, category)
-         
-          console.log(data.events)
-         // console.log(data.events.length)
-                  
-      })
-  })
+    var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
+    fetch(apiURL)
+    .then(function(response){
+        response.json().then(function(data){
+            console.log(data)
+            //displayLocation(data, category)
+            displayLocation(data, category)
+           
+            console.log(data.events)
+           // console.log(data.events.length)
+                    
+        });
+    });
+  
+}
+  var googleMap = function (lngLat) {
+    console.log("lngLast---->", lngLat)
+
+    var apiURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lngLat[1]},${lngLat[0]}&location_type=APPROXIMATE&key=AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w`
+    
+    fetch(apiURL)
+    .then(function(response){
+        response.json().then(function(data){
+            console.log("show filter data--->", data)
+            // create event list 
+          var repoEl = document.createElement('div');
+          repoEl.classList = 'list-item flex-row justify-space-between align-center';
+    
+          var titleEl = document.createElement('span');
+          titleEl.textContent = data.results[0].formatted_address;
+    
+          repoEl.appendChild(titleEl);
+          
+          results.appendChild(repoEl);
+            //displayLocation(data, category)
+           
+            //console.log(data.events)
+           // console.log(data.events.length)
+                    
+        });
+    });
 }
 
-// display function
+// display location 
 var displayLocation = function(data, category){
   results.innerHTML = ""
   var eventCount =0;
+  var coordinates = data.events.filter(list => list.categories[0].title ===  category && list.geometries[0].coordinates);
+
+  console.log('coordinates-->: ', coordinates)
+  mapMarkers(coordinates)
+
+  // Display location on list 
   for (i=0;i<data.events.length;i++){
       
     var title = data.events[i].categories[0].title
-    if(title == category){
+    
+    // show address category is not Sea and Lake Ice
+    if(title == category && title!== "Sea and Lake Ice"){
         eventCount++;
-      // create event list 
+        var lngLat = data.events[i].geometries[0].coordinates
+        googleMap(lngLat);
+        console.log(data.events[i].title)
+        //show address category is Sea and Lake Ice
+    }else if(title == category && title == "Sea and Lake Ice"){
+        eventCount++;
+        // create events list 
         var repoEl = document.createElement('div');
-        repoEl.classList = 'list-item flex-row justify-space-between align-center';
+          repoEl.classList = 'list-item flex-row justify-space-between align-center';
     
-        var titleEl = document.createElement('span');
-        titleEl.textContent = data.events[i].title;
+          var titleEl = document.createElement('span');
+          titleEl.textContent = data.events[i].title;
     
-        repoEl.appendChild(titleEl);
+          repoEl.appendChild(titleEl);
           
-        results.appendChild(repoEl);
-        
-      }
-      
-      console.log(data.events[i].title)
-      console.log(data.events[i].categories[0].title)
-      
+          results.appendChild(repoEl);
     }
-
-    // create event count
+  }
+    
+    // create event count& display event count
     counts.innerHTML = ""
     var totalEl = document.createElement('div');
     totalEl.classList = 'list-item flex-row justify-space-between align-center';
 
     var countEl = document.createElement('span');
-    countEl.textContent = "Total event number: "+ eventCount;
+    countEl.textContent = "There are "+ eventCount +" reported events";
 
-    console.log(totalEl)
-    console.log(document.querySelector("showCount"))
-    console.log(results)
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
   }
+  // show recent events
+  var showRecent = function(event){
+    event.preventDefault();
+    document.location.href = "./results.html";
+  }
 
-// function to show map on home page, maybe more.
+  var saveSearch = function(){
+    // console.log(categories)
+    localStorage.setItem("categories", JSON.stringify(categories));
+  };
+
+  var pastSearch = function(category){
+ 
+    // console.log(pastSearch)
+    var pastCategories = JSON.parse(localStorage.getItem("categories"));
+    //console.log(pastCities)
+    //clear search history 
+    pastSearchButtonEl.innerHTML = "";
+    for (i=0; i<pastCategories.length; i++){
+  
+    pastSearchEl = document.createElement("span");
+    pastButtonEl= document.createElement("button")
+    pastButtonEl.textContent = pastCategories[i];
+    pastSearchEl.classList = "d-flex w-100 btn-light border p-2";
+    pastButtonEl.setAttribute("data-categories",pastCategories[i])
+    pastSearchEl.setAttribute("type", "submit");
+    pastSearchEl.appendChild(pastButtonEl);
+    pastSearchButtonEl.appendChild(pastSearchEl);
+    }
+  }
+
+  var pastSearchHandler = function(event){
+    event.preventDefault();
+    // console.log("past search? work?--->",event.target )
+    var category2 = event.target.getAttribute("data-categories")
+    // console.log("worked?--->", category2)
+    if(category2){
+      // console.log("past search-->", category2)
+        getLocation(category2)
+    }
+  }
 
 searchBtn.addEventListener("click", searchHandler);
+recentEvent.addEventListener("click", showRecent);
+pastSearchButtonEl.addEventListener("click", pastSearchHandler);
 
 
-// write a function to showLocation on onclick.
-// write a function to showImage/showFacts onclick.
+// let the category button show category item when click 
+dropdown.addEventListener('click', function(event) {
+  event.stopPropagation();
+  dropdown.classList.toggle('is-active');
+});
+
+
+function storeScore() {
+  localStorage.setItem("category", JSON.stringify(category))
+  localStorage.setItem("number", JSON.stringify(counts))
+}
+
+function getScore() {
+  var compareResults = document.querySelector("#compare-disaster")
+  var compareCount = document.querySelector('#compare-count')
+  var storedCat = JSON.parse(localStorage.getItem("category"))
+  var storedCount = JSON.parse(localStorage.getItem("number"))
+
+  compareResults.appendChild = storedCat 
+  compareCount.appendChild = storedCount
+}
