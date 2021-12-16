@@ -83,9 +83,9 @@ var mapMarkers = function(locations){
 
   var LocationsForMap = locations;
 
-  var map = new google.maps.Map(document.getElementById('map'), {
+  var map = new window.google.maps.Map(document.getElementById('map'), {
   zoom: 2,
-  center: new google.maps.LatLng(28.704, 77.25),
+  center: new window.google.maps.LatLng(28.704, 77.25),
   mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
@@ -129,9 +129,10 @@ var searchHandler = function(event){
   event.preventDefault();
 
   var category = event.target.getAttribute("data-category")
-  // console.log(category)
   if(category){
-    getLocation(category);
+    localStorage.setItem("currentSelectedCategory", JSON.stringify(category));
+    displayLocation();
+    // getLocation(category);
     if (categories.includes(category) === false) categories.push(category);
 
   }
@@ -139,26 +140,14 @@ var searchHandler = function(event){
   pastSearch(category);
  }
 
-
-
-
-//Fetching data from EONET
-var getLocation = function (category) {
-    var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
-    fetch(apiURL)
-    .then(function(response){
-        response.json().then(function(data){
-            // console.log(data)
-            //displayLocation(data, category)
-            displayLocation(data, category)
-           
-            // console.log(data.events)
-           // console.log(data.events.length)
-                    
-        });
-    });
-  
-}
+var createTitleEl = (data, apiFrom) => {
+  var titleEl = document.createElement('span');
+  titleEl.textContent = (apiFrom === "eonet") ? (titleEl.textContent = data.events[i].title) : (data && data.results && data.results[0] && data.results[0].formatted_address);
+  var repoEl = document.createElement('div');
+  repoEl.classList = 'list-item flex-row justify-space-between align-center';
+  repoEl.appendChild(titleEl);
+  results.appendChild(repoEl);
+};
 
 // Fetch data from Google Map
   var googleMap = function (lngLat) {
@@ -168,34 +157,22 @@ var getLocation = function (category) {
     fetch(apiURL)
     .then(function(response){
         response.json().then(function(data){
-            // console.log("show filter data--->", data)
-            // create event list 
-          var repoEl = document.createElement('div');
-          repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    
-          var titleEl = document.createElement('span');
-          titleEl.textContent = data.results[0].formatted_address;
-    
-          repoEl.appendChild(titleEl);
-          
-          results.appendChild(repoEl);
-            //displayLocation(data, category)
-           
-            //console.log(data.events)
-           // console.log(data.events.length)
+          // create event list 
+          // localStorage.setItem("categoryDatas", JSON.stringify({"fetchName": "googleMap",...data}));
+          createTitleEl(data, "googleMap")
                     
         });
     });
 }
 
 // display location 
-var displayLocation = function(data, category){
+var displayLocation = function(){
   results.innerHTML = ""
   var eventCount =0;
   // display location by using google map 
- 
+  const category = JSON.parse(localStorage.getItem("currentSelectedCategory"));
+  const data = JSON.parse(localStorage.getItem("categoryDatas"));
   var coordinates = data.events.filter(list => list.categories[0].title ===  category && list.geometries[0].coordinates);
-
   // console.log('coordinates-->: ', coordinates)
   mapMarkers(coordinates)
 
@@ -216,14 +193,11 @@ var displayLocation = function(data, category){
         // console.log("iceberg: ", data.events[i].title)
         eventCount++;
         // create events list 
-        var repoEl = document.createElement('div');
-        repoEl.classList = 'list-item flex-row justify-space-between align-center';
-        var titleEl = document.createElement('span');
-        titleEl.textContent = data.events[i].title;
-        repoEl.appendChild(titleEl);
-        results.appendChild(repoEl);
+        createTitleEl(data, "eonet")
     }  
   }
+
+  
     
     // create event count& display event count
     counts.innerHTML = ""
@@ -231,7 +205,7 @@ var displayLocation = function(data, category){
     totalEl.classList = 'list-item flex-row justify-space-between align-center';
 
     var countEl = document.createElement('span');
-    countEl.textContent = "There are "+ eventCount +" reported events";
+    countEl.textContent = "There are "+ eventCount +" "+ category+" "+"reported events";
 
     
     totalEl.appendChild(countEl);  
@@ -279,11 +253,53 @@ var pastSearchHandler = function(event){
   // console.log("past search? work?--->",event.target )
   var category2 = event.target.getAttribute("data-categories")
   // console.log("worked?--->", category2)
+  localStorage.setItem("currentSelectedCategory", JSON.stringify(category2));
+  
   if(category2){
-    // console.log("past search-->", category2)
-      getLocation(category2)
+    displayLocation()
   }
 }
+
+//Fetching data from EONET
+var getLocation = async function () {
+  var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
+  await fetch(apiURL)
+  .then(function(response){
+      response.json().then(function(data){
+          localStorage.setItem("categoryDatas", JSON.stringify(data));
+          // displayLocation(data, category)
+      });
+  });
+}
+
+// This function is being called below and will run when the page loads.
+function init() {
+  
+  var storedCategories = JSON.parse(localStorage.getItem("categories"));
+  var categoryDatas = JSON.parse(localStorage.getItem("categoryDatas"));
+  var currentSelectedCategory = JSON.parse(localStorage.getItem("currentSelectedCategory"));
+
+  if(currentSelectedCategory && categoryDatas?.events) {
+    displayLocation();
+  }
+  //categoryDatas && categoryDatas.events---> categoryDatas?.events
+  if(!categoryDatas?.events){
+    getLocation();
+  }
+  
+  if (storedCategories !== null) {
+      // set cities = storedCities, so when reload page, cities is not [], it will have data before reload. 
+    categories = storedCategories; 
+  }
+   pastSearch()
+
+}
+window.onload = function() {
+  init();
+};
+
+
+
 
 searchBtn.addEventListener("click", searchHandler);
 recentEvent.addEventListener("click", showRecent);
