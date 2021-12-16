@@ -1,14 +1,6 @@
 # EONET
 
-Project Description - This website utilizes The Earth Observatory Natural Event Tracker (EONET) to provide continuously updated natural event data We plan to create a web application that will show natural event risk factors and hold the searches in localStorage to be pulled upon request and help the user determine the natural event risk factors of their desired area. (Bonus if we can break down the events individually on the results page).
-
-User story - As a user, I want a web application that will show a list of natural events that have occurred for a specific area within the last 365 days to determine which places are at high-risk in the next 365 days.
-
-"Linking to enable pull push updates"
-
-# Disaster Risk Factors
-
-This website utilizes The Earth Observatory Natural Event Tracker (EONET) API in conjunction with the Google Maps API to provide continuously updated natural event data plotted to a global map. Users can select from several different categories to see if the area they want to know about has experienced any of that type of natural occurrence.
+Project Description - This website utilizes The Earth Observatory Natural Event Tracker (EONET) in conjunction with the GOOGLE Maps API to provide continually updated natural event data plotted to a map. This application will show natural event occurences and hold the search data in localStorage to be pulled upon request. Users can select from several different categories to see if the area they want to know about has experienced any of that type of natural occurrence in the past 365 days.
 
 ## User Story
 
@@ -24,15 +16,13 @@ the location of the natural event
 WHEN I click on the pin, the event nomenclature is presented
 ```
 
-## Mock up
-
-![GIF](./assets/EONET.gif)
-
 ## Contributing
 
 [EONET API](https://eonet.gsfc.nasa.gov/)
 
 [Google Maps API](https://developers.google.com/maps/documentation/javascript/overview)
+
+HTML, CSS, Bulma, Java Script, Jquery?, MomentJS, NASA EONET API, Google Maps API, JPEGs, GIFs
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
@@ -40,6 +30,10 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 [Jared Haralson](https://github.com/jhara0994)
 
-[Jing Liu]()
+[Jing Liu](https://github.com/jing-liu-778)
 
 [Vincent Hobbs](https://github.com/icyhobbs?tab=repositories)
+
+## Mock up
+
+![EONET GIF](./assets/EONET.gif)
