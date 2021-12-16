@@ -169,6 +169,7 @@ var displayLocation = function(){
     event.preventDefault();
     var category2 = event.target.getAttribute("data-categories")
     localStorage.setItem("currentSelectedCategory", JSON.stringify(category2));
+    googleMsg.classList.add('hide')
     
     if(category2){
       displayLocation()
