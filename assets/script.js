@@ -13,11 +13,6 @@ function initMap() {
 
 }
 
-// Drop multiple markers 
-function initMap() {
-  
-}
-
 // Drop multiple markers on Google Map
 var mapMarkers = function(locations){
 
@@ -29,12 +24,9 @@ var mapMarkers = function(locations){
   mapTypeId: google.maps.MapTypeId.ROADMAP
 });
 
-  // var infowindow = new google.maps.InfoWindow();
-
   var marker, i;
 
   for (i = 0; i < LocationsForMap.length; i++) {
-    // console.log(`i--${i}-->: `, LocationsForMap[i])
     const geoCoordinates = LocationsForMap[i].geometries[0].coordinates;
     const geoTitle = LocationsForMap[i]['title'];
     marker = new google.maps.Marker({
@@ -62,76 +54,50 @@ var mapMarkers = function(locations){
   }
 };
 
-
-
 var searchHandler = function(event){
   event.preventDefault();
 
   var category = event.target.getAttribute("data-category")
-  console.log(category)
   if(category){
-    getLocation(category);
-    if (categories.includes(category) === false) categories.push(category);
+    localStorage.setItem("currentSelectedCategory", JSON.stringify(category));
+    displayLocation(category);
 
+    if (categories.includes(category) === false) categories.push(category);
   }
+
   googleMsg.classList.add('hide')
   saveSearch();
   pastSearch(category);
  }
 
+ var createTitleEl = (data, apiFrom) => {
+  var titleEl = document.createElement('span');
+  titleEl.textContent = (apiFrom === "eonet") ? (titleEl.textContent = data.events[i].title) : (data && data.results && data.results[0] && data.results[0].formatted_address);
+  var repoEl = document.createElement('div');
+  repoEl.classList = 'list-item flex-row justify-space-between align-center';
+  repoEl.appendChild(titleEl);
+  results.appendChild(repoEl);
+};
 
-//Fetching data from EONET
-var getLocation = function (category) {
-    var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
-    fetch(apiURL)
-    .then(function(response){
-        response.json().then(function(data){
-            console.log(data)
-            //displayLocation(data, category)
-            displayLocation(data, category)
-           
-            console.log(data.events)
-           // console.log(data.events.length)
-                    
-        });
-    });
-  
-}
   var googleMap = function (lngLat) {
-    console.log("lngLast---->", lngLat)
-
     var apiURL = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lngLat[1]},${lngLat[0]}&location_type=APPROXIMATE&key=AIzaSyCG0vKsx0zUzUjb9o7A86MdauceuRZYk1w`
     
     fetch(apiURL)
     .then(function(response){
         response.json().then(function(data){
-            console.log("show filter data--->", data)
-            // create event list 
-          var repoEl = document.createElement('div');
-          repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    
-          var titleEl = document.createElement('span');
-          titleEl.textContent = data.results[0].formatted_address;
-    
-          repoEl.appendChild(titleEl);
-          
-          results.appendChild(repoEl);
-            //displayLocation(data, category)
-           
-            //console.log(data.events)
-           // console.log(data.events.length)
-                    
+            createTitleEl(data, "googleMap")         
         });
     });
 }
 
 // display location 
-var displayLocation = function(data, category){
+var displayLocation = function(){
   results.innerHTML = ""
   var eventCount =0;
+  const category = JSON.parse(localStorage.getItem("currentSelectedCategory"));
+  const data = JSON.parse(localStorage.getItem("categoryDatas"));
   var coordinates = data.events.filter(list => list.categories[0].title ===  category && list.geometries[0].coordinates);
 
-  console.log('coordinates-->: ', coordinates)
   mapMarkers(coordinates)
 
   // Display location on list 
@@ -149,15 +115,7 @@ var displayLocation = function(data, category){
     }else if(title == category && title == "Sea and Lake Ice"){
         eventCount++;
         // create events list 
-        var repoEl = document.createElement('div');
-          repoEl.classList = 'list-item flex-row justify-space-between align-center';
-    
-          var titleEl = document.createElement('span');
-          titleEl.textContent = data.events[i].title;
-    
-          repoEl.appendChild(titleEl);
-          
-          results.appendChild(repoEl);
+        createTitleEl(data, "eonet")
     }
   }
     
@@ -178,6 +136,7 @@ var displayLocation = function(data, category){
     totalEl.appendChild(countEl);  
     counts.appendChild(totalEl)
   }
+
   // show recent events
   var showRecent = function(event){
     event.preventDefault();
@@ -190,10 +149,7 @@ var displayLocation = function(data, category){
   };
 
   var pastSearch = function(category){
- 
-    // console.log(pastSearch)
     var pastCategories = JSON.parse(localStorage.getItem("categories"));
-    //console.log(pastCities)
     //clear search history 
     pastSearchButtonEl.innerHTML = "";
     for (i=0; i<pastCategories.length; i++){
@@ -212,35 +168,56 @@ var displayLocation = function(data, category){
   var pastSearchHandler = function(event){
     event.preventDefault();
     var category2 = event.target.getAttribute("data-categories")
+    localStorage.setItem("currentSelectedCategory", JSON.stringify(category2));
     
     if(category2){
-        getLocation(category2)
+      displayLocation()
     }
   }
+
+//Fetching data from EONET
+var getLocation = async function() {
+  var apiURL = "https://eonet.gsfc.nasa.gov/api/v2.1/events?days=365"
+  await fetch(apiURL)
+  .then(function(response){
+      response.json().then(function(data){
+        localStorage.setItem("categoryDatas", JSON.stringify(data))
+      });
+  });
+}
+
+// This function is being called below and will run when the page loads.
+function init() {
+  
+  var storedCategories = JSON.parse(localStorage.getItem("categories"));
+  var categoryDatas = JSON.parse(localStorage.getItem("categoryDatas"));
+  var currentSelectedCategory = JSON.parse(localStorage.getItem("currentSelectedCategory"));
+
+  if(currentSelectedCategory && categoryDatas?.events) {
+    displayLocation();
+  }
+  //categoryDatas && categoryDatas.events---> categoryDatas?.events
+  if(!categoryDatas?.events){
+    getLocation();
+  }
+  
+  if (storedCategories !== null) {
+      // set cities = storedCities, so when reload page, cities is not [], it will have data before reload. 
+    categories = storedCategories; 
+  }
+   pastSearch()
+
+}
+window.onload = function() {
+  init();
+};
 
 searchBtn.addEventListener("click", searchHandler);
 recentEvent.addEventListener("click", showRecent);
 pastSearchButtonEl.addEventListener("click", pastSearchHandler);
-
 
 // let the category button show category item when click 
 dropdown.addEventListener('click', function(event) {
   event.stopPropagation();
   dropdown.classList.toggle('is-active');
 });
-
-
-function storeScore() {
-  localStorage.setItem("category", JSON.stringify(category))
-  localStorage.setItem("number", JSON.stringify(counts))
-}
-
-function getScore() {
-  var compareResults = document.querySelector("#compare-disaster")
-  var compareCount = document.querySelector('#compare-count')
-  var storedCat = JSON.parse(localStorage.getItem("category"))
-  var storedCount = JSON.parse(localStorage.getItem("number"))
-
-  compareResults.appendChild = storedCat 
-  compareCount.appendChild = storedCount
-}
